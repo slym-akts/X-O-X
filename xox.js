@@ -3,8 +3,6 @@ const playerT=document.getElementById("player");
 const errorT=document.getElementById("error");
 
 let player="X";
-let gameOver = false;
-let winner;
 const winningCombinations = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8], // Yatay
     [0, 3, 6], [1, 4, 7], [2, 5, 8], // Dikey
@@ -13,7 +11,10 @@ const winningCombinations = [
 
 function click(box) {
     if (box.textContent==="") {
-        box.textContent=player;    
+        box.textContent=player;  
+        if (player==="O") {
+            box.style.color="red"
+        }  
         playerTurn();
         
     }
@@ -25,10 +26,7 @@ function click(box) {
     },2500);
     }
     win();
-    if (gameOver) {
-        playerT.textContent= "Game Over! ,"+ player+"WON !!!";
-        boxs.forEach(box=>box.style.pointerEvents="none");
-    }
+    chackTie();
     }
 
 function playerTurn() {
@@ -42,6 +40,16 @@ function playerTurn() {
         return;
     }    
 }
+function chackTie() {
+    const values =[];
+    boxs.forEach(box=>values.push(box.textContent));
+    if (!values.includes("")) {
+        playerT.textContent= "Game Over! , Tie !!!";
+        boxs.forEach(box=>box.style.pointerEvents="none");
+        
+    }
+    
+}
 
 function win() {
     for (let combo of winningCombinations) {
@@ -50,12 +58,18 @@ function win() {
         console.log(`Values: ${boxs[a].textContent}, ${boxs[b].textContent}, ${boxs[c].textContent}`);
         
         if (boxs[a].textContent !== '' && boxs[a].textContent === boxs[b].textContent && boxs[a].textContent === boxs[c].textContent) {
-            gameOver=true;
-            return console.log(boxs[a].textContent);
+            
+           
+            boxs.forEach(box=>box.style.pointerEvents="none");
+            
+            return  playerT.textContent= "Game Over! , "+ boxs[a].textContent+" Won !!!";
              // Kazanan 'X' veya 'O' döndür
         }
+       
+        
         
     }
+    
     
     
 }
